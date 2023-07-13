@@ -1,0 +1,15 @@
+{
+  "name": "oracle-keeper",
+  "version": "1.0.0",
+  "description": "A microservice that pushes price data to the Oracle Proxy.",
+  "main": "src/oraclekeeper.js",
+  "scripts": {
+    "start": "node src/oraclekeeper.js"
+  },
+  "dependencies": {
+    "@stacks/network": "^6.5.4",
+    "@stacks/transactions": "^6.5.4",
+    "bn.js": "^5.2.1",
+    "dotenv": "^16.3.1"
+  }
+}
