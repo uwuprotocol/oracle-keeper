@@ -3,15 +3,13 @@ const bn = require("bn.js");
 const txn = require("@stacks/transactions");
 const { StacksMainnet } = require("@stacks/network");
 
-const blockchainApi = process.env.BLOCKCHAIN_API;
-const publicKey = process.env.PUBLIC_KEY;
-const privateKey = process.env.PRIVATE_KEY;
-const contractAddress = process.env.CONTRACT_ADDRESS;
-const contractName = process.env.CONTRACT_NAME;
-const functionName = process.env.FUNCTION_NAME;
-const feeRate = process.env.FEE_RATE;
+const rpcUrl = process.env.RPC_URL;
+const signerPublicKey = process.env.SIGNER_PUBLIC_KEY;
+const signerPrivateKey = process.env.SIGNER_PRIVATE_KEY;
+const oracleContractName = process.env.ORACLE_CONTRACT_NAME;
+const txFeeRate = process.env.TX_FEE_RATE;
 
-if (!blockchainApi || !publicKey || !privateKey || !contractAddress || !contractName || !functionName || !feeRate) {
+if (!rpcUrl || !signerPublicKey || !signerPrivateKey || !oracleContractName || !txFeeRate) {
   console.error(`[Oracle Keeper - ${Date.now()}] Missing one or more of the required environment variables.`);
   process.exit(1);
 };
@@ -27,13 +25,13 @@ const fetchJSON = async (url) => {
 };
 
 const fetchNonce = async () => {
-  const url = `${blockchainApi}/extended/v1/address/${publicKey}/nonces`;
+  const url = `${rpcUrl}/extended/v1/address/${signerPublicKey}/nonces`;
   const response = await fetchJSON(url);
 
   const nonce = response?.possible_next_nonce;
 
-  if(nonce === undefined) {
-    console.error(`[Oracle Keeper - ${Date.now()}] An error occurred while fetching the possible next nonce for ${publicKey}.`);
+  if (nonce === undefined) {
+    console.error(`[Oracle Keeper - ${Date.now()}] An error occurred while fetching the possible next nonce for ${signerPublicKey}.`);
     throw new Error(`ERROR: Missing possible_next_nonce in response.`);
   };
 
@@ -47,13 +45,13 @@ const callBroadcastTransaction = async () => {
     let nonce = await fetchNonce();
 
     const options = {
-      contractAddress: contractAddress,
-      contractName: contractName,
-      functionName: functionName,
+      contractAddress: "SP2AKWJYC7BNY18W1XXKPGP0YVEK63QJG4793Z2D4",
+      contractName: oracleContractName,
+      functionName: "send-to-proxy",
       functionArgs: [],
-      senderKey: privateKey,
+      senderKey: signerPrivateKey,
       nonce: new bn(nonce),
-      fee: new bn(feeRate, 10),
+      fee: new bn(txFeeRate, 10),
       postConditionMode: 2,
       network
     };
