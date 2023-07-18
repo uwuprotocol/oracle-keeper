@@ -44,6 +44,12 @@ The following environment variables are needed in the `.env` file:
 
 - `TX_FEE_RATE`: The fee rate in uSTX paid to broadcast transactions.
 
+## Discussion
+Please join us on [Discord](http://chat.quorumdao.org) for discussions or report any issues you encounter on this Github repository or on our [Canny](https://uwu.canny.io).
+
+## Code of Conduct
+Please read our [Code of Conduct](CODE_OF_CONDUCT.md) to understand our community standards and expectations.
+
 ## License
 
 This repository is licenesed under the GNU General Public License v3.0. See [LICENSE](LICENSE) for more information.
