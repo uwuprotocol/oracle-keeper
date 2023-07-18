@@ -34,19 +34,15 @@ A microservice that pushes price data to the Oracle Proxy.
 
 The following environment variables are needed in the `.env` file:
 
-- `BLOCKCHAIN_API`: The URL of the Stacks Blockchain API instance you're interacting with. 
+- `RPC_URL`: The URL of the Stacks Blockchain API instance.
 
-- `PUBLIC_KEY`: The public key for the address used to broadcast transactions.
+- `SIGNER_PUBLIC_KEY`: The public key of the account signing transactions.
 
-- `PRIVATE_KEY`: The private key for the address used to broadcast transactions. 
+- `SIGNER_PRIVATE_KEY`: The private key of the account signing transactions.
 
-- `CONTRACT_ADDRESS`: The address of the contract you want to interact with.
+- `ORACLE_CONTRACT_NAME`: The name of the authorized Oracle contract.
 
-- `CONTRACT_NAME`: The name of the contract you want to interact with.
-
-- `FUNCTION_NAME`: The name of the function in the contract that you want to call.
-
-- `FEE_RATE`: The fee rate in microstacks for broadcasting transactions.
+- `TX_FEE_RATE`: The fee rate in uSTX paid to broadcast transactions.
 
 ## License
 
