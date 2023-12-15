@@ -1,4 +1,5 @@
 require("dotenv").config();
+
 const bn = require("bn.js");
 const txn = require("@stacks/transactions");
 const { StacksMainnet } = require("@stacks/network");
@@ -10,29 +11,31 @@ const oracleContractName = process.env.ORACLE_CONTRACT_NAME;
 const txFeeRate = process.env.TX_FEE_RATE;
 
 if (!rpcUrl || !signerPublicKey || !signerPrivateKey || !oracleContractName || !txFeeRate) {
-  console.error(`[Oracle Keeper - ${Date.now()}] Missing one or more of the required environment variables.`);
+  console.error(`Oracle Keeper (${Date.now()}): Missing one or more of the required environment variables`);
   process.exit(1);
 };
 
 const fetchJSON = async (url) => {
   try {
     const response = await fetch(url);
+
     return await response.json();
   } catch (err) {
-    console.error(`[Oracle Keeper - ${Date.now()}] An error occurred while fetching data from ${url}.`);
-    throw new Error(`ERROR: ${err}`);
+    console.error(`Oracle Keeper (${Date.now()}) An error occurred while fetching data from '${url}'`);
+
+    throw new Error(`Operation Error (${Date.now()}): ${err}`);
   };
 };
 
 const fetchNonce = async () => {
   const url = `${rpcUrl}/extended/v1/address/${signerPublicKey}/nonces`;
   const response = await fetchJSON(url);
-
   const nonce = response?.possible_next_nonce;
 
   if (nonce === undefined) {
-    console.error(`[Oracle Keeper - ${Date.now()}] An error occurred while fetching the possible next nonce for ${signerPublicKey}.`);
-    throw new Error(`ERROR: Missing possible_next_nonce in response.`);
+    console.error(`Oracle Keeper (${Date.now()}): An error occurred while fetching the possible next nonce for '${signerPublicKey}'`);
+    
+    throw new Error(`Operation Error (${Date.now()}): Missing 'possible_next_nonce' in response`);
   };
 
   return nonce;
@@ -59,10 +62,11 @@ const callBroadcastTransaction = async () => {
     const transaction = await txn.makeContractCall(options);
     const result = await txn.broadcastTransaction(transaction, network);
 
-    console.log(`[Oracle Keeper - ${Date.now()}] Successfully broadcasted a transaction with hash ${transaction.txid()}.`);
+    console.log(`Oracle Keeper (${Date.now()}): Successfully broadcasted a transaction with hash '${transaction.txid()}'`);
   } catch (err) {
-    console.error(`[Oracle Keeper - ${Date.now()}] An error occurred while broadcasting a transaction.`);
-    throw new Error(`ERROR: ${err}`);
+    console.error(`Oracle Keeper (${Date.now()}): An error occurred while broadcasting a transaction`);
+
+    throw new Error(`Operation Error (${Date.now()}): ${err}`);
   };
 };
 
