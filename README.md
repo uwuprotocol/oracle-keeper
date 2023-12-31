@@ -12,12 +12,12 @@ A microservice that pushes price data to the Oracle Proxy.
     cd oracle-keeper
     ```
 
-3. Install the dependencies: 
+3. Install the required dependencies: 
     ```
     npm install
     ```
 
-4. Create a `.env` file in the root directory and fill in the necessary variables. An example file `.env.example` is provided.
+4. Create a `.env` file in the root directory and fill in the necessary variables. An example file, `.env.example`, is provided as a reference.
 
 ## Usage
 1. Navigate into the directory: 
@@ -40,9 +40,15 @@ The following environment variables are needed in the `.env` file:
 
 - `SIGNER_PRIVATE_KEY`: The private key of the account signing transactions.
 
-- `ORACLE_CONTRACT_NAME`: The name of the authorized Oracle contract.
+- `SOURCE_ORACLE_CONTRACT`: The address and name of the source oracle contract.
 
-- `TX_FEE_RATE`: The fee rate in uSTX paid to broadcast transactions.
+- `UWU_ORACLE_CONTRACT`: The address and name of UWU Protocol's oracle contract.
+
+- `TX_MIN_FEE_RATE`: The minimum fee rate in uSTX paid to broadcast transactions.
+
+- `TX_MAX_FEE_RATE`: The maximum fee rate in uSTX paid to broadcast transactions.
+
+- `TX_RBF_INCREMENT`: The amount of uSTX added to the fee rate of a transaction that is being replaced.
 
 ## Discussion
 Please join us on [Discord](http://chat.uwu.cash) for discussions or report any issues you encounter on this Github repository or on our [Canny](https://uwu.canny.io).
