@@ -170,7 +170,7 @@ const runScript = async () => {
     console.log(`Oracle Keeper (${Date.now()}): Successfully broadcasted a transaction`);
     console.log(`[Transaction] Oracle Keeper (${Date.now()}): [ID: ${transaction.txid()}]`);
     console.log(`[Transaction] Oracle Keeper (${Date.now()}): [Type: ${txType}]`);
-    console.log(`[Transaction] Oracle Keeper (${Date.now()}): [Nonce: ${nonce.toString()}]`);
+    console.log(`[Transaction] Oracle Keeper (${Date.now()}): [Nonce: ${finalNonce.toString()}]`);
     console.log(`[Transaction] Oracle Keeper (${Date.now()}): [Fee Rate: ${feeRate.toString()}]`);
   } catch (err) {
     console.error(`[Operation Error] Oracle Keeper (${Date.now()}): ${err.message}`);
