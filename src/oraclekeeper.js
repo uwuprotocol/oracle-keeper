@@ -31,7 +31,7 @@ const fetchNonce = async (address, type = "next") => {
 
     return nonce;
   } catch (err) {
-    throw new Error(`Failed to fetch nonce for address '${address}': ${err.message}`);
+    throw new Error(`Failed to fetch the nonce for address '${address}': ${err.message}`);
   };
 };
 
