@@ -24,10 +24,10 @@ const fetchJSON = async (url) => {
   };
 };
 
-const fetchNonce = async (address) => {
+const fetchNonce = async (address, type = "next") => {
   try {
     const response = await fetchJSON(`${rpcUrl}/extended/v1/address/${address}/nonces`);
-    const nonce = response.possible_next_nonce;
+    const nonce = (type === "next") ? response.possible_next_nonce : response.last_executed_tx_nonce;
 
     return nonce;
   } catch (err) {
@@ -127,17 +127,24 @@ const runScript = async () => {
     const latestPendingTx = await fetchLatestPendingTransaction(signerPublicKey);
     const stxBalance = new bn(await fetchSTXBalance(signerPublicKey));
 
-    let nonce = new bn(await fetchNonce(signerPublicKey));
+    let finalNonce = new bn(await fetchNonce(signerPublicKey, "next"));
+    let lastNonce = new bn(await fetchNonce(signerPublicKey, "last"));
     let feeRate = new bn(await fetchFeeRate(txMinFeeRate, txMaxFeeRate));
     let txType = "New";
 
-    if (latestPendingTx && latestPendingTx.sender_address === signerPublicKey &&
+    if (latestPendingTx &&
+      latestPendingTx.sender_address === signerPublicKey &&
       latestPendingTx.tx_type === "contract_call" &&
       latestPendingTx.contract_call.contract_id === uwuOracleContract &&
       latestPendingTx.contract_call.function_name === "send-to-proxy") {
-      nonce = new bn(latestPendingTx.nonce);
+      finalNonce = new bn(latestPendingTx.nonce);
       feeRate = new bn(latestPendingTx.fee_rate).add(new bn(txRBFIncrement));
       txType = "Replacement";
+    };
+
+    if (finalNonce.eq(lastNonce)) {
+      finalNonce.iadd(new bn(1));
+      txType = "New";
     };
 
     if (stxBalance.lt(feeRate)) {
@@ -150,7 +157,7 @@ const runScript = async () => {
       functionName: "send-to-proxy",
       functionArgs: [],
       senderKey: signerPrivateKey,
-      nonce: nonce,
+      nonce: finalNonce,
       fee: feeRate,
       postConditionMode: 2,
       network
