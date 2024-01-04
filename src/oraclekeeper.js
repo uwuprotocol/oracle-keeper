@@ -136,7 +136,8 @@ const runScript = async () => {
       latestPendingTx.sender_address === signerPublicKey &&
       latestPendingTx.tx_type === "contract_call" &&
       latestPendingTx.contract_call.contract_id === uwuOracleContract &&
-      latestPendingTx.contract_call.function_name === "send-to-proxy") {
+      latestPendingTx.contract_call.function_name === "send-to-proxy" &&
+      new bn(latestPendingTx.nonce).gt(lastNonce)) {
       finalNonce = new bn(latestPendingTx.nonce);
       feeRate = new bn(latestPendingTx.fee_rate).add(new bn(txRBFIncrement));
       txType = "Replacement";
